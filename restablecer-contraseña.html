@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña - MiServicio</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Restablecer Contraseña</h2>
+        <form id="resetPasswordForm" method="POST" action="/api/resetPassword" >
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" placeholder="Ingresa tu correo" required>
+
+            <button type="submit">Enviar Enlace de Restablecimiento</button>
+        </form>
+    </div>
+
+    <script>
+        document.querySelector('#resetPasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim().toLowerCase();;
+            try {
+            const response = await fetch('/api/resetPassword', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+// Verificar si la respuesta fue exitosa
+if (response.ok) {
+            const data = await response.json();
+            alert(data.mensaje); // Enlace enviado con éxito
+        } else if (response.status === 404) {
+            alert('El correo no está registrado'); // Manejo explícito del error 404
+        } else {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.mensaje || 'Error desconocido'}`);
+        }
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        alert(`Error: ${error.message}`);
+    }
+});
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - CJServices</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Panel de Administración</h1>
+
+        <!-- Barra de búsqueda -->
+        <input type="text" id="search-input" placeholder="Buscar por nombre y apellido">
+        <button onclick="buscarUsuarios()">Buscar</button>
+
+        <table id="usuarios-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Estado del Paquete</th>
+                    <th>Actualizar Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Los datos de los usuarios se cargarán aquí mediante JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- Campo para actualizar el estado del paquete -->
+        <select id="estado-paquete">
+            <option value="">Seleccionar Estado</option>
+            <option value="sin paquete">Sin Paquete</option>
+            <option value="en transito">En Tránsito</option>
+            <option value="en bodega">En Bodega</option>
+            <option value="entregado">Cancelado</option>
+        </select>
+        <button onclick="actualizarEstadoPaquete()">Actualizar Estado</button>
+
+        <button id="logout-button" class="logout-button">Cerrar Sesión</button>
+    </div>
+
+    <script>
+        // Variables globales
+        let usuarioIdSeleccionado = null;
+
+        async function buscarUsuarios() {
+            const searchValue = document.getElementById('search-input').value;
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Acceso denegado. Debes iniciar sesión como administrador.");
+                window.location.href = "inicio-sesion.html";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/usuarios?search=${encodeURIComponent(searchValue)}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                if (response.status === 403 || response.status === 401) {
+                    alert("Acceso denegado. No tienes permisos para ver esta página.");
+                    localStorage.removeItem('token');
+                    window.location.href = "inicio-sesion.html";
+                    return;
+                }
+
+                throw new Error("Error al buscar usuarios");
+            }
+                const usuarios = await response.json();
+                actualizarTabla(usuarios);
+            } catch (error) {
+                console.error("Error al buscar usuarios:", error);
+                alert("Hubo un problema al buscar los usuarios.");
+            }
+        }
+
+        function actualizarTabla(usuarios) {
+            const tableBody = document.querySelector('#usuarios-table tbody');
+            tableBody.innerHTML = '';
+
+            if (usuarios.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7">No se encontraron usuarios.</td></tr>';
+                return;
+            }
+
+            usuarios.forEach(usuario => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${usuario.nombre || 'N/A'}</td>
+                <td>${usuario.apellido || 'N/A'}</td>
+                <td>${usuario.email || 'N/A'}</td>
+                <td>${usuario.telefono || 'N/A'}</td>
+                <td>${usuario.direccion || 'N/A'}</td>
+                <td id="estado-paquete-${usuario.id}">${usuario.estado_paquete}</td>
+                    <td><button onclick="seleccionarUsuario(${usuario.id})">Seleccionar</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function seleccionarUsuario(id) {
+            usuarioIdSeleccionado = id;
+            alert(`Usuario ${id} seleccionado. Ahora puedes actualizar el estado del paquete.`);
+        }
+
+        async function actualizarEstadoPaquete() {
+            if (!usuarioIdSeleccionado) {
+                alert("Selecciona un usuario primero.");
+                return;
+            }
+
+            const nuevoEstado = document.getElementById('estado-paquete').value;
+            const token = localStorage.getItem('token');
+
+            if (!nuevoEstado) {
+                alert("Selecciona un estado de paquete.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/usuarios/${usuarioIdSeleccionado}/paquete`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nuevoEstado })
+                });
+
+                if (response.ok) {
+                    alert("Estado del paquete actualizado exitosamente.");
+                     // Actualizar dinámicamente el estado en la tabla
+            document.getElementById(`estado-paquete-${usuarioIdSeleccionado}`).innerText = nuevoEstado;
+            document.getElementById('estado-paquete').value = '';
+                } else {
+                    alert("Error al actualizar el estado del paquete.");
+                }
+            } catch (error) {
+                console.error("Error al actualizar el estado del paquete:", error);
+                alert("Hubo un problema al actualizar el estado del paquete.");
+            }
+        }
+        document.addEventListener('DOMContentLoaded', buscarUsuarios); 
+
+
+        document.getElementById('logout-button').addEventListener('click', function () {
+        // Eliminar cualquier información de sesión (si aplica)
+        localStorage.removeItem('token'); // Cambiar 'token' si usas un nombre diferente
+        sessionStorage.clear();
+
+        // Redirigir al index.html
+        window.location.href = 'index.html';
+    });
+    </script>
+</body>
+</html>

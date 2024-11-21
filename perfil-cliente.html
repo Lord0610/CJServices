@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil del Cliente - MiServicio</title>
+    <link rel="stylesheet" href="/css/perfil-cliente.css">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">Cargojet Services</div>
+            <nav></nav>
+            <button id="logout-button" class="logout-button">Cerrar Sesión</button>
+        </div>
+    </header>
+    <div class="perfil-container">
+        <h1>Perfil del Cliente</h1>
+        <form id="perfil-form">
+            <h2>Información Personal</h2>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" disabled>
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" disabled>
+            <label for="email">Correo:</label>
+            <input type="email" id="email" name="email" disabled>
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" disabled>
+
+            <div class="informacion-container">
+                <!-- Casillero -->
+                <div class="informacion-bloque">
+                    <h2>Información del Casillero</h2>
+                    <p id="nombre-casillero"></p>
+                    <p id="direccion-casillero"></p>
+                    <p id="ciudad-casillero"></p>
+                    <p id="pais-casillero"></p>
+                    <p id="telefono-casillero"></p>
+                </div>
+                <!-- Carga Marítima -->
+                <div class="informacion-bloque">
+                    <h2>Información de Carga Marítima</h2>
+                    <p id="nombre-ocean"></p>
+                    <p id="direccion-ocean"></p>
+                    <p id="direccion2-ocean"></p>
+                    <p id="ciudad-ocean"></p>
+                    <p id="pais-ocean"></p>
+                    <p id="telefono-ocean"></p>
+                </div>
+            </div>
+        </form>
+        <div class="estado-paquete">
+            <h2>Estado de su Paquete</h2>
+            <p id="estado-paquete">Cargando estado...</p>
+        </div>
+    </div>
+    
+    <script>
+        // Recuperar el token almacenado
+      // Recuperar el token almacenado
+      const token = localStorage.getItem('token');
+
+// Verificar si el usuario tiene sesión iniciada
+if (token) {
+    fetch('/api/perfil', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Verificación de datos recibidos
+        if (!data || !data.datosCasillero || !data.datosOcean) {
+            console.error('Datos incompletos recibidos del servidor.');
+            return;
+        }
+
+        console.log(data);
+
+        // Actualizar la interfaz de usuario con los datos del perfil
+        document.getElementById('nombre').value = data.nombre || 'No proporcionado';
+        document.getElementById('apellido').value = data.apellido || 'No proporcionado';
+        document.getElementById('email').value = data.email || 'No proporcionado';
+        document.getElementById('telefono').value = data.telefono || 'No proporcionado';
+
+        // Información del casillero
+        const { datosCasillero } = data;
+        document.getElementById('nombre-casillero').innerText = `Nombre: ${datosCasillero.nombre}`;
+        document.getElementById('direccion-casillero').innerText = `Dirección: ${datosCasillero.direccion}`;
+        document.getElementById('ciudad-casillero').innerText = `Ciudad, estado y código postal: ${datosCasillero.ciudad}, ${datosCasillero.estado} ${datosCasillero.codigoPostal}`;
+        document.getElementById('pais-casillero').innerText = `País: ${datosCasillero.pais}`;
+        document.getElementById('telefono-casillero').innerText = `Teléfono: ${datosCasillero.telefono}`;
+
+        // Información de carga marítima
+        const { datosOcean } = data;
+        document.getElementById('nombre-ocean').innerText = `Nombre: ${datosOcean.nombre}`;
+        document.getElementById('direccion-ocean').innerText = `Dirección: ${datosOcean.direccion}`;
+        document.getElementById('direccion2-ocean').innerText = `Dirección 2: ${datosOcean.direccion2}`;
+        document.getElementById('ciudad-ocean').innerText = `Ciudad, estado y código postal: ${datosOcean.ciudad}, ${datosOcean.estado} ${datosOcean.codigoPostal}`;
+        document.getElementById('pais-ocean').innerText = `País: ${datosOcean.pais}`;
+        document.getElementById('telefono-ocean').innerText = `Teléfono: ${datosOcean.telefono}`;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ocurrió un error al intentar acceder a la ruta protegida.');
+    });
+} else {
+    alert('Debes iniciar sesión primero');
+    window.location.href = 'inicio-sesion.html';
+}
+
+// Botón de cierre de sesión
+document.getElementById('logout-button').addEventListener('click', function () {
+    // Eliminar token y limpiar datos de sesión
+    localStorage.removeItem('token');
+    sessionStorage.clear();
+    // Redirigir al inicio
+    window.location.href = 'index.html';
+});
+
+// Cargar información del cliente al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    cargarInformacionCliente();
+    cargarEstadoPaquete(); // Asegúrate de que esta función esté implementada correctamente
+});
+
+// Función para cargar la información del cliente
+async function cargarInformacionCliente() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Por favor, inicia sesión.');
+        window.location.href = '/inicio-sesion.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/perfil', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener el perfil');
+        }
+
+        const data = await response.json();
+
+        if (!data || !data.datosCasillero || !data.datosOcean) {
+            console.error('Datos incompletos recibidos del servidor.');
+            return;
+        }
+
+        // Actualizar la interfaz de usuario con los datos del perfil
+        document.getElementById('nombre').value = data.nombre || 'No proporcionado';
+        document.getElementById('apellido').value = data.apellido || 'No proporcionado';
+        document.getElementById('email').value = data.email || 'No proporcionado';
+        document.getElementById('telefono').value = data.telefono || 'No proporcionado';
+
+        // Información del casillero
+        const { datosCasillero } = data;
+        document.getElementById('nombre-casillero').innerText = `Nombre: ${datosCasillero.nombre}`;
+        document.getElementById('direccion-casillero').innerText = `Dirección: ${datosCasillero.direccion}`;
+        document.getElementById('ciudad-casillero').innerText = `Ciudad, estado y código postal: ${datosCasillero.ciudad}, ${datosCasillero.estado} ${datosCasillero.codigoPostal}`;
+        document.getElementById('pais-casillero').innerText = `País: ${datosCasillero.pais}`;
+        document.getElementById('telefono-casillero').innerText = `Teléfono: ${datosCasillero.telefono}`;
+
+        // Información de carga marítima
+        const { datosOcean } = data;
+        document.getElementById('nombre-ocean').innerText = `Nombre: ${datosOcean.nombre}`;
+        document.getElementById('direccion-ocean').innerText = `Dirección: ${datosOcean.direccion}`;
+        document.getElementById('direccion2-ocean').innerText = `Dirección 2: ${datosOcean.direccion2}`;
+        document.getElementById('ciudad-ocean').innerText = `Ciudad, estado y código postal: ${datosOcean.ciudad}, ${datosOcean.estado} ${datosOcean.codigoPostal}`;
+        document.getElementById('pais-ocean').innerText = `País: ${datosOcean.pais}`;
+        document.getElementById('telefono-ocean').innerText = `Teléfono: ${datosOcean.telefono}`;
+    } catch (error) {
+        console.error('Error en cargarInformacionCliente:', error);
+        alert('No se pudo cargar la información del cliente.');
+    }
+}
+
+    
+        // Manejo del formulario de perfil
+        document.querySelector('#perfil-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+        
+            const clienteData = {
+                nombre: document.getElementById('nombre').value,
+                apellido: document.getElementById('apellido').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                direccion: document.getElementById('direccion').value
+            };
+        
+            try {
+                const response = await fetch('/api/perfil', { // Asegúrate de que esta ruta en el servidor soporte PUT o POST
+                    method: 'POST', // o 'POST' según corresponda
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify(clienteData)
+                });
+        
+                if (!response.ok) throw new Error('Error al actualizar la información del cliente');
+        
+                const data = await response.json();
+                alert(data.mensaje);
+            } catch (error) {
+                console.error('Error en la actualización de perfil:', error);
+                alert('Ocurrió un error al actualizar el perfil.');
+            }
+        });
+        
+
+        async function cargarEstadoPaquete() {
+            const token = localStorage.getItem('token');
+
+            
+            try {
+                const response = await fetch('/api/estado-paquete', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+            const data = await response.json();
+            document.getElementById('estado-paquete').innerText = `Estado del Paquete: ${data.estado}`;
+        } else {
+            console.error("No se pudo obtener el estado del paquete.");
+        }
+    } catch (error) {
+        console.error("Error al cargar el estado del paquete:", error);
+    }
+}
+   
+    document.getElementById('logout-button').addEventListener('click', function () {
+        // Eliminar cualquier información de sesión (si aplica)
+        localStorage.removeItem('token'); // Cambiar 'token' si usas un nombre diferente
+        sessionStorage.clear();
+
+        // Redirigir al index.html
+        window.location.href = 'index.html';
+    });
+
+
+        </script>
+        
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Contraseña - MiServicio</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Cambiar Contraseña</h2>
+        <form id="changepasswordform" method="POST" action="/api/changepassword" >
+            <label for="new-password">Nueva Contraseña:</label>
+            <input type="password" id="new-password" name="new-password" required>
+
+            <label for="confirm-password">Confirmar Contraseña:</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+
+            <button type="submit">Cambiar Contraseña</button>
+        </form>
+    </div>
+
+    <script>
+        document.querySelector('#changepasswordform').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (!newPassword || !confirmPassword) {
+                alert('Las contraseñas no coinciden.');
+                return;
+            }
+
+            const response = await fetch('/api/changepassword', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, newPassword })
+            });
+
+            const data = await response.json();
+            if (data.exito) {
+                alert(data.mensaje || 'Contraseña cambiada exitosamente.');
+                window.location.href = '/inicio-sesion.html';
+            } else {
+                alert(`Error: ${data.mensaje || 'Hubo un problema al cambiar la contraseña.'}`);
+            }
+        });
+    </script>
+</body>
+</html>

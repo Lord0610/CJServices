@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        .info {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hola ${nombre},</h1>
+        <p>¡Gracias por registrarte en Cargojet Services! Aquí están tus datos de registro:</p>
+        <div class="info">
+            <p><strong>Nombre:</strong> ${nombre} ${apellido}/CJS</p>
+            <p><strong>Dirección:</strong> 1345 Nw 98th Ct, Unit 2c</p>
+            <p><strong>Ciudad, estado y código postal:</strong> Doral, FL 33172-3049</p>
+            <p><strong>País:</strong> Estados Unidos</p>
+            <p><strong>Teléfono:</strong> (786)330-2816</p>
+        </div>
+        <p>Esta es tu información de carga marítima:</p>
+        <div class="info">
+            <p><strong>Nombre:</strong> ${nombre} ${apellido}/CJS Ocean</p>
+            <p><strong>Dirección:</strong> 1345 Nw 98th Ct, Unit 2</p>
+            <p><strong>Dirección 2:</strong> OCEAN</p>
+            <p><strong>Ciudad, estado y código postal:</strong> Miami, FL 33172-3049</p>
+            <p><strong>País:</strong> Estados Unidos</p>
+            <p><strong>Teléfono:</strong> +1(786)3602816</p>
+        </div>
+        <p>¡Esperamos poder ayudarte con nuestros servicios!</p>
+        <p>Saludos,<br>El equipo de Cargojet Services</p>
+    </div>
+</body>
+</html>

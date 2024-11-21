@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - CJservices</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Iniciar Sesión</h2>
+        <form id="login-form" method="POST" action="/api/login">
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Iniciar Sesión <a href="perfil-cliente.html"></a></button>
+            <p>
+                <a href="restablecer-contraseña.html">¿Olvidaste tu contraseña?</a>
+            </p>
+            <p>
+                ¿No tienes una cuenta? <a href="registro.html">Registrarse</a>
+            </p>
+        </form>
+    </div>
+   
+    <script>
+        document.querySelector('#login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+    
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+    
+                const data = await response.json();
+                
+    
+                if (data.exito && data.token) {
+                    alert('Inicio de sesión exitoso');
+                    localStorage.setItem('token', data.token);
+                    
+                    // Verifica el rol antes de redirigir
+                    if (data.rol === 'admin') {
+                        console.log("Redirigiendo a admin.html...");
+                        window.location.href = 'admin.html';
+                    } else if (data.rol === 'cliente') {
+                        console.log("Redirigiendo a perfil-cliente.html...");
+                        window.location.href = 'perfil-cliente.html';
+                    } else {
+                        alert("Rol no reconocido.");
+                    }
+                } else {
+                    alert(data.mensaje || 'Correo o contraseña incorrectos');
+                }
+                
+                document.getElementById('login-form').reset();
+            } catch (error) {
+                console.error('Error al iniciar sesión:', error);
+                alert('Error de conexión. Intente de nuevo más tarde.');
+            }
+        });
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecimiento de Contraseña</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a.button:hover {
+            background-color: #0056b3;
+        }
+        .logo {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Restablecimiento de Contraseña</h1>
+        <p>Hola,</p>
+        <p>Para restablecer tu contraseña, haz clic en el siguiente enlace:</p>
+        <a href="${resetLink}" class="button">Restablecer Contraseña</a>
+        <p>Si no solicitaste un restablecimiento de contraseña, por favor ignora este correo.</p>
+        <p>Saludos,<br>El equipo de Cargojet Services</p>
+        <div class="logo">
+            <img src="./images/logo.png" alt="Logo de Cargojet Services" width="200">
+        </div>
+    </div>
+</body>
+</html>

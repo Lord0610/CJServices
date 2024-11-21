@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - CJservices</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">CJservices</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="inicio-sesion.html" class="login-btn">Iniciar Sesión</a>
+                <a href="registro.html" class="signup-btn">Registrarse</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección del formulario de contacto -->
+    <section class="contactform">
+        <div class="form-container">
+            <h2>Contáctanos</h2>
+            <form id="contactform" method="POST" >
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+
+                <button type="submit">Enviar Mensaje</button>
+            </form>
+        </div>
+    </section>
+    <a href="https://wa.me/50767297662" class="whatsapp-button" target="_blank"> <img src="https://image.flaticon.com/icons/svg/124/124034.svg" alt="WhatsApp"> </a>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Cargojet Services. Todos los derechos reservados.</p>
+            <!-- <ul>
+                <li><a href="#">Política de Privacidad</a></li>
+                <li><a href="#">Términos y Condiciones</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul> -->
+        </div>
+    </footer>
+    <script>
+      document.querySelector('#contactform').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const nombre = document.getElementById('nombre').value;
+        const email = document.getElementById('email').value;
+        const mensaje = document.getElementById('mensaje').value;
+
+        try {
+            const response = await fetch('/api/contacto', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre, email, mensaje }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert(data.mensaje);
+
+                // Limpiar el formulario
+                document.getElementById('contactform').reset();
+            } else {
+                alert('Hubo un problema al enviar el mensaje.');
+            }
+        } catch (error) {
+            console.error('Error en la solicitud:', error);
+            alert('Hubo un error al enviar el mensaje.');
+        }
+            
+        });
+    </script>
+</body>
+</html>
