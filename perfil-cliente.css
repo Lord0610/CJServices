@@ -1,0 +1,290 @@
+/* Estilos específicos para perfil-cliente.html */
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos generales */
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    background-color: #f3f4f6; /* Fondo gris suave */
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh; /* Asegura que el contenido siempre ocupe toda la ventana */
+    margin: 0;
+}
+main {
+    flex: 1; /* Hace que el contenido principal ocupe el espacio restante */
+}
+
+/* Contenedor general */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Barra de navegación */
+header {
+    width: 100%;
+    background-color: #1f2937; /* Gris oscuro */
+    color: #ffffff;
+    padding: 1px 0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #10b981; /* Verde esmeralda */
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #10b981; /* Verde esmeralda */
+}
+
+.auth-buttons a {
+    margin-left: 20px;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 15px;
+    border: 1px solid #10b981;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+
+.auth-buttons .signup-btn,
+.auth-buttons .login-btn {
+    background-color: #b92910; /* Verde esmeralda */
+}
+
+.auth-buttons a:hover {
+    background-color: rgba(16, 185, 129, 0.8);
+}
+
+
+.perfil-container {
+    display: grid;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Títulos */
+.perfil-container h1,
+.perfil-container h2 {
+    text-align: center;
+    color: #1f2937;
+}
+
+/* Formulario principal */
+#perfil-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* Información personal y casillero/marítima lado a lado */
+#perfil-form h2 {
+    grid-column: span 2; /* Ocupa todo el ancho en su fila */
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+input, p {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+input[disabled] {
+    background-color: #f3f4f6;
+    color: #555;
+    cursor: not-allowed;
+}
+
+#nombre-casillero,
+#nombre-ocean {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+p {
+    margin: 5px 0;
+}
+
+/* Organización de casillero y marítima */
+.informacion-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.informacion-bloque {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #8f8d8d;
+}
+
+/* Estado del paquete */
+.estado-paquete {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #e0f7fa;
+    border: 1px solid #10b981;
+    border-radius: 8px;
+}
+
+.estado-paquete h2 {
+    color: #1f2937;
+}
+
+.estado-paquete p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00695c;
+}
+
+/* Botón de cerrar sesión */
+.logout-button {
+    display: block;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    max-width: 200px;
+    margin: 30px auto;
+    text-align: center;
+    padding: 10px 15px;
+    background-color: #ff4b5c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #e63946;
+}
+
+
+/* Diseño responsivo */
+@media (max-width: 576px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    .features {
+        flex-direction: column;
+        padding: 15px;
+    }
+    .hero {
+        padding: 30px 15px;
+    }
+    .cta-button {
+        padding: 8px 18px;
+        font-size: 14px;
+    }
+    .admin-container {
+        padding: 15px;
+    }
+    #search-input, #estado-paquete {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .features {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .hero {
+        padding: 40px 20px;
+    }
+    .cta-button {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 992px) {
+    .nav-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .features {
+        flex-direction: row;
+        padding: 30px;
+    }
+    .feature {
+        width: 45%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .nav-container {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    .hero {
+        padding: 60px 30px;
+    }
+    .features {
+        padding: 40px 25px;
+    }
+    .feature {
+        width: 30%;
+    }
+}

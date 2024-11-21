@@ -1,0 +1,211 @@
+/* Estilos para admin.html */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* Centra el contenedor horizontalmente */
+    align-items: center;    /* Centra el contenedor verticalmente */
+    min-height: 100vh;      /* Hace que el cuerpo ocupe toda la altura de la pantalla */
+    background-color: #f3f4f6; /* Fondo gris suave */
+}
+
+.admin-container {
+    display: grid;
+    width: 90%;
+    max-width: 1200px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto; /* Asegura que se mantenga centrado horizontalmente en caso de flex-box limitado */
+}
+
+.admin-container h1 {
+    color: #b92910;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#search-input {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    justify-self: center; /* Centra el input dentro del contenedor */
+}
+
+button {
+    background-color: #b92910;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    justify-self: center; /* Centra el botón dentro del contenedor */
+}
+
+#logout-button{
+    background-color: #b92910;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    justify-self: right;
+}
+
+button:hover {
+    background-color: #357ab8;
+}
+
+#usuarios-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+#usuarios-table th, #usuarios-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#usuarios-table th {
+    background-color: #333;
+    color: white;
+}
+
+#usuarios-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#usuarios-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+#estado-paquete {
+    width: 200px;
+    padding: 10px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    justify-self: left; /* Centra el select dentro del contenedor */
+}
+
+/* Media queries para responsividad en todos los tamaños posibles */
+
+/* Pantallas grandes: monitores de escritorio y laptops grandes */
+@media (max-width: 1200px) {
+    .admin-container {
+        width: 95%; /* Reduce el ancho para adaptarse a pantallas más pequeñas */
+    }
+
+    #search-input {
+        width: 90%;
+    }
+
+    #usuarios-table th, #usuarios-table td {
+        font-size: 15px; /* Reduce ligeramente el tamaño de las tablas */
+    }
+}
+
+/* Pantallas medianas: laptops y tablets en orientación horizontal */
+@media (max-width: 1024px) {
+    .admin-container {
+        width: 90%; /* Ajusta el ancho para pantallas medianas */
+    }
+
+    .estado-actions {
+        gap: 15px; /* Aumenta el espacio entre elementos */
+    }
+
+    #search-input {
+        width: 85%;
+    }
+}
+
+/* Tablets en orientación vertical y pantallas medianas */
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 20px;
+        width: 100%; /* Usa todo el ancho disponible */
+    }
+
+    #search-input {
+        width: 100%; /* Ocupa toda la pantalla en dispositivos pequeños */
+    }
+
+    .estado-actions {
+        flex-direction: column; /* Apila los elementos verticalmente */
+        align-items: stretch; /* Asegura que los elementos se expandan */
+    }
+
+
+    #usuarios-table {
+        font-size: 15px; /* Reduce ligeramente el tamaño de texto */
+    }
+}
+
+/* Smartphones grandes en orientación horizontal */
+@media (max-width: 640px) {
+    .admin-container {
+        padding: 15px;
+        gap: 10px; /* Reduce el espacio entre elementos */
+    }
+
+    #usuarios-table th, #usuarios-table td {
+        font-size: 14px; /* Reduce el tamaño de texto para mantener legibilidad */
+    }
+
+    .estado-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* Smartphones medianos */
+@media (max-width: 480px) {
+    .admin-container {
+        padding: 15px; /* Reduce el padding en pantallas muy pequeñas */
+        width: 100%;
+    }
+
+    #usuarios-table th, #usuarios-table td {
+        font-size: 14px; /* Reduce el tamaño de texto en tablas */
+    }
+
+    .estado-actions {
+        flex-direction: column; /* Apila los elementos verticalmente */
+        gap: 8px;
+    }
+
+   
+}
+
+/* Smartphones pequeños y dispositivos muy pequeños */
+@media (max-width: 360px) {
+    .admin-container {
+        padding: 10px;
+        width: 100%;
+    }
+
+    #search-input {
+        font-size: 14px;
+        padding: 8px; /* Reduce el padding para encajar mejor */
+    }
+
+    #usuarios-table th, #usuarios-table td {
+        font-size: 12px; /* Tamaño pequeño para caber en pantallas muy pequeñas */
+    }
+
+   
+}
